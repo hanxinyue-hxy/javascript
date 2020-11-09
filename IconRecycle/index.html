@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>图标回收站</title>
+    <!-- The jQuery UI Styles -->
+    <link rel="stylesheet" href="styles/jquery-ui.css" />
+    <!-- Our stylesheet -->
+    <link rel="stylesheet" href="styles/styles.css" />
+</head>
+
+<body>
+    <div id="main">
+        <div class="folder">
+            <!--folder 加open类名文件夹打开-->
+            <div class="front"></div>
+            <div class="back"></div>
+        </div>​
+        <img src="images/box.png" style="top:340px;left:100px;" alt="box" />
+        <img src="images/calculator.png" style="top:340px;left:170px;" alt="calculator" />
+        <img src="images/clipboard.png" style="top:340px;left:240px;" alt="clipboard" />
+        <img src="images/console.png" style="top:340px;left:310px;" alt="console" />
+        <img src="images/basketball.png" style="top:340px;left:380px;" alt="basketball" />
+        <img src="images/facebook.png" style="top:400px;left:100px;" alt="facebook" />
+        <img src="images/gift.png" style="top:400px;left:170px;" alt="gift" />
+        <img src="images/id_card.png" style="top:400px;left:240px;" alt="id card" />
+        <img src="images/imac.png" style="top:400px;left:310px;" alt="imac" />
+        <img src="images/system_monitoring.png" style="top:400px;left:380px;" alt="system monitoring" />
+    </div>
+
+    <script>
+	var main=document.querySelector('#main');//大盒子
+	var folder=document.querySelector('.folder');//文件夹
+	var front=document.querySelector('.front');//数字
+	//拖拽
+	var flag=false;//开关
+	var pos=null;//鼠标到元素的位置
+	var el=null;//当前按下的图标 事件源
+	//1.鼠标按下
+	main.addEventListener('mousedown',function(e)
+	{
+		e= e || window.event;
+		var t=e.target || e.srcElement;//兼容事件源
+		e.preventDefault();//取消默认行为
+		if(t.nodeName==='IMG')
+		{
+			flag=true;//打开开关
+			pos={//记录鼠标到元素的位置
+				x:e.offsetX,
+				y:e.offsetY
+			}
+		}
+		el=t;//当前按下的图标
+		//添加类名
+		folder.classList.add('open');//张嘴
+		
+	})
+	
+	//2.鼠标移动
+	document.addEventListener('mousemove',function(e)
+	{
+		if(flag)
+		{
+			el.style.left=e.pageX-pos.x-main.offsetLeft+'px';
+			el.style.top=e.pageY-pos.y-main.offsetTop+'px';
+		}
+	})
+	
+	//3.鼠标抬起
+	document.addEventListener('mouseup',function(e)
+	{
+		flag=false;
+		//闭嘴
+		var s= folder.getBoundingClientRect();//文件夹的位置和尺寸信息
+		folder.classList.remove('open');
+		//判断是否进入文件夹
+		if(e.pageX>s.left && e.pageX<s.right && e.pageY>s.top && e.pageY<s.bottom)
+		{
+			main.removeChild(el);//删除图标
+			front.innerHTML++;
+		}
+	})
+    </script>
+</body>
+</html>
